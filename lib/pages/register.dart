@@ -23,8 +23,12 @@ class _AddDataState extends State<AddData> {
       "email": controllerEmail.text,
       "phone": controllerPhone.text
     });
-    print(response.body);
-    //  var datauser = json.decode(response.body);
+    // print(response.body);
+    var conditon = response.body;
+    if(conditon == '#nameerror' ){
+      print("Sorry ....");
+    }
+
   }
 
   @override
