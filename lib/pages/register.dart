@@ -15,6 +15,8 @@ class _AddDataState extends State<AddData> {
   TextEditingController controllerPhone = new TextEditingController();
   var _formkey = GlobalKey<FormState>();
   bool _validate = false;
+
+  String errname = '';
   void addData() async {
     final response =
         await http.post("https://www.rapidspice.com/yehtet/adddata.php", body: {
@@ -23,12 +25,16 @@ class _AddDataState extends State<AddData> {
       "email": controllerEmail.text,
       "phone": controllerPhone.text
     });
-    // print(response.body);
-    var conditon = response.body;
-    if(conditon == '#nameerror' ){
-      print("Sorry ....");
+    print(response.body);
+    var condition = response.body;
+    if (condition.length == 3) {
+      setState(() {
+      errname = "success";
+      Navigator.pushReplacementNamed(context, '/BottomNavBar');
+      });
+    }else{
+      errname = "fail";
     }
-
   }
 
   @override
@@ -144,7 +150,7 @@ class _AddDataState extends State<AddData> {
                                     _sendToServer;
                                     if (_formkey.currentState.validate()) {
                                       addData();
-                                      Navigator.pop(context);
+                                      // Navigator.pop(context);
                                     }
                                   },
                                   color: Colors.cyan,
@@ -153,6 +159,11 @@ class _AddDataState extends State<AddData> {
                                   shape: new RoundedRectangleBorder(
                                       borderRadius:
                                           new BorderRadius.circular(6.0))),
+                              Text(
+                                errname,
+                                style: TextStyle(
+                                    fontSize: 10.0, color: Colors.red),
+                              ),
                               new Padding(
                                 padding: const EdgeInsets.only(top: 20.0),
                               ),
