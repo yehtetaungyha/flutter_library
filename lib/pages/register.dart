@@ -29,14 +29,16 @@ class _AddDataState extends State<AddData> {
     var condition = response.body;
     if (condition.length == 3) {
       setState(() {
-      errname = "success";
-      Navigator.pushReplacementNamed(context, '/BottomNavBar');
+        print('success');
+        Navigator.pushReplacementNamed(context, '/BottomNavBar');
       });
-    }else{
-      errname = "fail";
+    } else {
+      errname = "Already Username taken!";
+      print('Already Username taken!');
     }
   }
-
+String _password;
+String _confirmpassword;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,11 +82,7 @@ class _AddDataState extends State<AddData> {
                                   labelText: "Enter Username",
                                 ),
                                 keyboardType: TextInputType.text,
-                                obscureText: true,
-                                validator: (value) {
-                                  if (value.isEmpty)
-                                    return "please fill username";
-                                },
+                                validator: (value) => value.isEmpty ? "please fill username" : null,
                               ),
                               new TextFormField(
                                 controller: controllerEmail,
@@ -119,6 +117,7 @@ class _AddDataState extends State<AddData> {
                                 ),
                                 keyboardType: TextInputType.text,
                                 obscureText: true,
+                                onSaved: (val) => _password = val,
                                 validator: validatePassword,
                               ),
                               new TextFormField(
@@ -133,14 +132,12 @@ class _AddDataState extends State<AddData> {
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.cyan),
                                   ),
-                                  labelText: "Enter Phone",
+                                  labelText: "Confirm Password",
                                 ),
                                 keyboardType: TextInputType.text,
                                 obscureText: true,
-                                validator: (value) {
-                                  if (value.isEmpty)
-                                    return "please fill Phonenumber";
-                                },
+                                validator: (value) => value.isEmpty ? "please fill Confirm Password" : null,
+                                onSaved: (val) => _confirmpassword = val,
                               ),
                               new Padding(
                                 padding: const EdgeInsets.only(top: 20.0),
@@ -197,9 +194,9 @@ class _AddDataState extends State<AddData> {
   String validatePassword(String value) {
     if (value.length == 0) {
       return "Password is required";
-    } else {
-      return null;
-    }
+    } else if(_confirmpassword != _password) {
+      return "Password is not matching";
+    }return null;
   }
 
   get _sendToServer {
